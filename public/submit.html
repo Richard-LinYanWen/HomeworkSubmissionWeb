@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="style.css">
+
+<body>
+    <div id="navbar-placeholder"></div>
+    <script src="navbar.js"></script>
+
+    <div class="auth-wrapper">
+        <div class="auth-container">
+            <h2 id="hw-title">Submit Homework</h2>
+            <p style="color: #666; margin-bottom: 20px;">Upload your files for grading</p>
+            
+            <form id="uploadForm">
+                <div class="file-input-wrapper">
+                    <input type="file" id="hwFile" required>
+                </div>
+                <button type="submit">Upload Submission</button>
+            </form>
+            
+            <a href="index.html" class="back-link">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        // Get the HW number from the URL (e.g., submit.html?hw=1)
+        const params = new URLSearchParams(window.location.search);
+        const hwNum = params.get('hw');
+        if (hwNum) {
+            document.getElementById('hw-title').innerText = `Homework ${hwNum} Submission`;
+        }
+    </script>
+</body>

@@ -1,0 +1,175 @@
+.dashboard-header {
+    text-align: center;
+}
+
+.hw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.hw-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hw-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-color: #007bff;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 1rem 2rem;
+    font-family: Arial, sans-serif;
+}
+
+.nav-links a, .nav-links span {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+}
+
+.logout-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.logout-btn:hover {
+    background-color: #ff3333;
+}
+
+/* Target the logo link specifically */
+.nav-logo a {
+    color: white;             /* Initial color */
+    text-decoration: none;    /* Remove underline */
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: opacity 0.3s; /* Optional: smooth fade instead of color change */
+}
+
+/* This is the part that stops the "Clicked Link" purple color */
+.nav-logo a:visited, 
+.nav-logo a:active, 
+.nav-logo a:focus {
+    color: white;             /* Keeps it white even after clicking */
+}
+
+/* Optional: Make it slightly dim when hovering so the user knows it's a link */
+.nav-logo a:hover {
+    opacity: 0.8;
+    color: white; 
+}
+
+/* Ensure the Login/Register links also stay consistent if you want */
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.nav-links a:visited {
+    color: white;
+}
+
+/* 1. Center the entire card on the screen */
+body {
+    margin: 0;
+    background-color: #f4f7f6; /* Light grey background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 70px); /* Adjust for navbar height */
+}
+
+/* 2. The Card itself */
+.auth-container {
+    background: white;
+    margin-top: 20px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    width: 100%;
+    max-width: 400px; /* Limits width on desktop */
+    text-align: center;
+    justify-self: center;
+}
+
+.auth-container h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+}
+
+/* 3. Inputs and Button */
+.auth-container input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Crucial: includes padding in width */
+    font-size: 1rem;
+}
+
+.auth-container input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.auth-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+}
+
+.auth-container button:hover {
+    background-color: #2980b9;
+}
+
+/* 4. Footer Link */
+.auth-container p {
+    margin-top: 20px;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.auth-container a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-container a:hover {
+    text-decoration: underline;
+}

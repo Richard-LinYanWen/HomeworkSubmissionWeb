@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="style.css">
+
+<body>
+    <div id="navbar-placeholder"></div>
+    <script src="navbar.js"></script>
+
+    <div class="auth-wrapper">
+        <div class="auth-container">
+            <h2>Create Account</h2>
+            <p style="color: #666; margin-bottom: 20px;">Join the Homework Portal</p>
+            
+            <form id="regForm">
+                <input type="text" id="regUser" placeholder="Choose Username" required>
+                <input type="password" id="regPass" placeholder="Choose Password" required>
+                <button type="submit">Create Account</button>
+            </form>
+            
+            <p>Already a member? <a href="login.html">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('regForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('regUser').value;
+            const password = document.getElementById('regPass').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                if(response.ok) {
+                    alert("Registration successful! Now please login.");
+                    window.location.href = 'login.html';
+                } else {
+                    const data = await response.json();
+                    alert(data.message || "Registration failed");
+                }
+            } catch (err) {
+                alert("Server connection failed.");
+            }
+        };
+    </script>
+</body>
