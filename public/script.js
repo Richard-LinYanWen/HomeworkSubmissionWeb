@@ -25,57 +25,100 @@ if (loginForm) {
 }
 
 // --- 2. REGISTER LOGIC ---
-const regForm = document.getElementById('regForm');
-if (regForm) {
-    regForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('regUser').value;
-        const password = document.getElementById('regPass').value;
+document.getElementById('regForm').onsubmit = async (e) => {
+    e.preventDefault();
+    
+    const username = document.getElementById('regUser').value;
+    const password = document.getElementById('regPass').value;
+    const confirmPass = document.getElementById('regPassConfirm').value;
+    const errorMsg = document.getElementById('error-msg');
 
-        const res = await fetch('/api/register', {
+    // 1. Client-side Validation: Do they match?
+    if (password !== confirmPass) {
+        errorMsg.innerText = "Passwords do not match!";
+        errorMsg.style.display = "block";
+        return; // Stop the function here
+    }
+
+    // Hide error if they do match
+    errorMsg.style.display = "none";
+
+    try {
+        const response = await fetch('http://localhost:5000/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
         });
-        if (res.ok) {
-            alert("Success! Please login.");
+        
+        if(response.ok) {
+            alert("Registration successful! Redirecting to login...");
             window.location.href = 'login.html';
         } else {
-            alert("Registration failed.");
+            const data = await response.json();
+            alert(data.message || "Registration failed");
         }
-    };
-}
+    } catch (err) {
+        alert("Server connection failed.");
+    }
+};
 
 // --- 3. SUBMISSION LOGIC (In submit.html) ---
-const submitForm = document.getElementById('uploadForm');
-if (submitForm) {
-    // Fill in the name automatically if logged in
-    if (currentUser) {
-        document.getElementById('studentName').value = currentUser;
+// This ensures the script waits for the HTML to be fully 'drawn'
+document.addEventListener('DOMContentLoaded', () => {
+    const uploadForm = document.getElementById('uploadForm');
+
+    if (!uploadForm) {
+        console.error("❌ ERROR: Could not find the form! Check your HTML ID.");
+        return;
     }
 
-    submitForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const urlParams = new URLSearchParams(window.location.search);
+    uploadForm.addEventListener('submit', async (event) => {
+        // 1. COMPLETELY KILL THE REFRESH
+        event.preventDefault();
+        event.stopImmediatePropagation();
         
-        const submissionData = {
-            studentName: document.getElementById('studentName').value,
-            homeworkId: urlParams.get('hw'),
-            fileName: document.getElementById('hwFile').files[0].name
-        };
+        console.log("✅ Success! The page did NOT refresh.");
 
-        const res = await fetch('/api/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(submissionData)
-        });
+        const fileInput = document.getElementById('hwFile');
+        const username = localStorage.getItem('loggedInUser');
 
-        if (res.ok) {
-            alert("Homework Submitted!");
-            window.location.href = 'index.html';
+        if (!username) {
+            alert("Please login first.");
+            return;
         }
-    };
-}
+
+        if (!fileInput.files[0]) {
+            alert("Please select a file.");
+            return;
+        }
+
+        // 2. Prepare Data
+        const formData = new FormData();
+        const params = new URLSearchParams(window.location.search);
+        const hwValue = params.get('hw') || '0'; 
+        formData.append('username', username);
+        formData.append('hwNumber', hwValue); 
+        formData.append('homeworkFile', fileInput.files[0]);
+
+        try {
+            console.log("📡 Sending to server...");
+            const response = await fetch('http://localhost:5000/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("Upload Successful!");
+                window.location.href = 'index.html';
+            } else {
+                alert("Server rejected the upload.");
+            }
+        } catch (err) {
+            console.error("📡 Fetch Error:", err);
+            alert("Could not connect to server.");
+        }
+    });
+});
 
 // --- 4. DASHBOARD LOGIC (In index.html) ---
 const welcomeMsg = document.getElementById('welcome-user');
@@ -124,7 +167,6 @@ function updateNavbar() {
         // If logged in, show username and Logout button
         authStatus.innerHTML = `
             <span>Welcome, <strong>${user}</strong></span>
-            <a href="index.html">Dashboard</a>
             <button onclick="logout()" class="logout-btn">Logout</button>
         `;
     } else {

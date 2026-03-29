@@ -29,7 +29,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #333;
+    background-color: #176ffc;
     color: white;
     padding: 1rem 2rem;
     font-family: Arial, sans-serif;
@@ -172,4 +172,59 @@ body {
 
 .auth-container a:hover {
     text-decoration: underline;
+}
+
+/* Container for the buttons */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Spacing between buttons */
+}
+
+/* Base style for the buttons */
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+/* Specific "Login" style (Ghost button) */
+.nav-links a[href="login.html"] {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.nav-links a[href="login.html"]:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+/* Specific "Register" style (Solid button) */
+.nav-links a[href="register.html"] {
+    background-color: #3498db; /* Blue background */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-links a[href="register.html"]:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+    transform: translateY(-1px); /* Slight lift effect */
+}
+
+/* Logout button (matching the new style) */
+.logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
 }

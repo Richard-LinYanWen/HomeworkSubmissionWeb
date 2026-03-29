@@ -42,7 +42,7 @@
 
                 if (response.ok) {
                     // 1. Save the username so we can use it on the homework page
-                    localStorage.setItem('loggedInUser', data.user);
+                    localStorage.setItem('loggedInUser', data.username);
                     
                     alert("Login Successful!");
                     // 2. Redirect to the main dashboard

@@ -1,8 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const multer = require('multer');
+const path = require('path');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
 
 // Import Blueprints from the models folder
 const User = require('./models/user');
@@ -13,8 +15,11 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('public')); // Serves your HTML/CSS/JS
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 // 1. DATABASE CONNECTION
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { family : 4 })
     .then(() => console.log("✅ Connected to Online MongoDB Cluster"))
     .catch(err => console.error("❌ DB Connection Error:", err));
 
@@ -46,13 +51,37 @@ app.post('/api/login', async (req, res) => {
 });
 
 // 4. SUBMISSION ROUTE
-app.post('/api/submit', async (req, res) => {
+app.post('/api/upload', upload.single('homeworkFile'), async (req, res) => {
     try {
-        const newSubmission = new Submission(req.body);
-        await newSubmission.save();
-        res.json({ message: "Homework saved to database!" });
+        const username = req.body.username;
+        const hwNumber = String(req.body.hwNumber);
+
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded." });
+        }
+
+        // Convert the file buffer to a String (The .cpp code)
+        const cppCode = req.file.buffer.toString('utf8');
+
+        // This replaces the previous submission for this specific User + HW
+        const result = await Submission.findOneAndUpdate(
+            { username: username, hwNumber: hwNumber }, 
+            { 
+                fileName: req.file.originalname,
+                codeContent: req.file.buffer.toString('utf8'),
+                submittedAt: Date.now() 
+            },
+            { upsert: true, new: true }
+        );
+
+        res.status(200).json({ 
+            message: "Submission saved to Cluster successfully!",
+            id: result._id 
+        });
+
     } catch (err) {
-        res.status(500).json({ message: "Failed to save submission" });
+        console.error("Upload Error:", err);
+        res.status(500).json({ error: "Server failed to save to Cluster." });
     }
 });
 

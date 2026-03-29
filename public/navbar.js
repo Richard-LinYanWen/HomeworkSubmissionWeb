@@ -22,7 +22,6 @@ function injectNavbar() {
         if (user) {
             authStatus.innerHTML = `
                 <span>Welcome, <strong>${user}</strong></span>
-                <a href="index.html">Dashboard</a>
                 <button onclick="logout()" class="logout-btn">Logout</button>
             `;
         } else {

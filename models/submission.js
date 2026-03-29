@@ -1,10 +1,28 @@
 const mongoose = require('mongoose');
 
 const submissionSchema = new mongoose.Schema({
-    studentName: { type: String, required: true }, // The "Who"
-    homeworkId: { type: String, required: true },  // The "Which one"
-    fileName: String,                             // The "What"
-    submittedAt: { type: Date, default: Date.now }
+    username: { 
+        type: String, 
+        required: true 
+    },
+    hwNumber: { 
+        type: String, 
+        required: true 
+    },
+    fileName: { 
+        type: String, 
+        required: true 
+    },
+    // This stores the raw C++ code text in the cloud
+    codeContent: { 
+        type: String, 
+        required: true 
+    },
+    submittedAt: { 
+        type: Date, 
+        default: Date.now 
+    }
 });
 
-const Submission = mongoose.model('submission', submissionSchema);
+// Important: This handles the "Not a constructor" error by exporting correctly
+module.exports = mongoose.model('submission', submissionSchema);

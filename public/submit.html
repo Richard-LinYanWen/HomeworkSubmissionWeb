@@ -21,11 +21,70 @@
     </div>
 
     <script>
-        // Get the HW number from the URL (e.g., submit.html?hw=1)
+        // 1. Get the HW number from the URL immediately when page loads
         const params = new URLSearchParams(window.location.search);
         const hwNum = params.get('hw');
         if (hwNum) {
             document.getElementById('hw-title').innerText = `Homework ${hwNum} Submission`;
+        }
+
+        const form = document.getElementById('uploadForm');
+
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault(); // Stop page refresh
+
+                const fileInput = document.getElementById('hwFile');
+                
+                // CHECK THIS NAME: Does your login save it as 'loggedInUser' or 'username'?
+                // Based on your previous code, let's use 'loggedInUser'
+                const username = localStorage.getItem('loggedInUser');
+                
+                if (!username) {
+                    alert("You are not logged in!");
+                    return;
+                }
+
+                if (!fileInput.files[0]) {
+                    alert("Please select a file!");
+                    return;
+                }
+
+                const formData = new FormData();
+                
+                // Re-fetch params inside the listener to be safe
+                const currentParams = new URLSearchParams(window.location.search);
+                const hwValue = currentParams.get('hw') || '0'; 
+
+                // 2. ORDER MATTERS: Text first, then File
+                formData.append('username', username);
+                formData.append('hwNumber', hwValue); 
+                formData.append('homeworkFile', fileInput.files[0]);
+
+                // Debugging: This will show you in the console exactly what is being sent
+                //console.log("Submitting HW Number:", hwValue);
+                //console.log("Submitting Username:", username);
+
+                try {
+                    const response = await fetch('http://localhost:5000/api/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        alert("✅ " + (result.message || "Uploaded!"));
+                        window.location.href = 'index.html';
+                    } else {
+                        alert("❌ Server Error: " + (result.error || "Unknown Error"));
+                    }
+                } catch (err) {
+                    alert("❌ Connection Failed: " + err);
+                }
+            });
+        } else {
+            console.error("Form not found!");
         }
     </script>
 </body>
