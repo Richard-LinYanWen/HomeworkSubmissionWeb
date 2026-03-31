@@ -10,6 +10,8 @@ const bcrypt = require('bcryptjs');
 const User = require('./models/user');
 const Submission = require('./models/submission');
 
+const PORT = process.env.PORT || 5000;
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -85,5 +87,4 @@ app.post('/api/upload', upload.single('homeworkFile'), async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
