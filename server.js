@@ -20,6 +20,11 @@ app.use(express.static('public')); // Serves your HTML/CSS/JS
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+//fallback vercel root route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // 1. DATABASE CONNECTION
 mongoose.connect(process.env.MONGO_URI, { family : 4 })
     .then(() => console.log("✅ Connected to Online MongoDB Cluster"))
